@@ -36,7 +36,7 @@ func main() {
 	projects := bgp.Projects
 	table := tview.NewTextView()
 	table.SetBorder(true)
-	table.SetText(getString(projects[0]))
+	table.SetText(fmtProjectDescription(projects[0]))
 	codebuilds := tview.NewList().
 		ShowSecondaryText(false).
 		SetDoneFunc(func() {
@@ -66,11 +66,11 @@ func main() {
 
 func getBuilds(table *tview.TextView, projects []types.Project) func(index int, mainText string, secondaryText string, shortcut rune) {
 	return func(index int, mainText string, secondaryText string, shortcut rune) {
-		table.SetText(getString(projects[index]))
+		table.SetText(fmtProjectDescription(projects[index]))
 	}
 }
 
-func getString(project types.Project) string {
+func fmtProjectDescription(project types.Project) string {
 	text := strings.Builder{}
 	if project.Name != nil {
 		txt := fmt.Sprintf("name: %s\n", *project.Name)
