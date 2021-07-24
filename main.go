@@ -33,8 +33,10 @@ func main() {
 		panic(err)
 	}
 
+	projects := bgp.Projects
 	table := tview.NewTextView()
 	table.SetBorder(true)
+	table.SetText(getString(projects[0]))
 	codebuilds := tview.NewList().
 		ShowSecondaryText(false).
 		SetDoneFunc(func() {
@@ -64,45 +66,48 @@ func main() {
 
 func getBuilds(table *tview.TextView, projects []types.Project) func(index int, mainText string, secondaryText string, shortcut rune) {
 	return func(index int, mainText string, secondaryText string, shortcut rune) {
-		project := projects[index]
-		text := strings.Builder{}
-		if project.Name != nil {
-			txt := fmt.Sprintf("name: %s\n", *project.Name)
-			text.WriteString(txt)
-		}
-		if project.Arn != nil {
-			txt := fmt.Sprintf("arn: %s\n", *project.Arn)
-			text.WriteString(txt)
-		}
-		text.WriteString(fmt.Sprintf("created: %s\n", project.Created))
-		text.WriteString(fmt.Sprintf("last modified: %s\n", project.LastModified))
-		if project.ServiceRole != nil {
-			txt := fmt.Sprintf("service role: %s\n", *project.ServiceRole)
-			text.WriteString(txt)
-		}
-		if project.ConcurrentBuildLimit != nil {
-			txt := fmt.Sprintf("conccurent build limit: %d\n", *project.ConcurrentBuildLimit)
-			text.WriteString(txt)
-		}
-		if project.Description != nil {
-			txt := fmt.Sprintf("description: %s\n", *project.Description)
-			text.WriteString(txt)
-		}
-		if project.EncryptionKey != nil {
-
-			txt := fmt.Sprintf("encryption key: %s\n", *project.EncryptionKey)
-			text.WriteString(txt)
-		}
-		if project.QueuedTimeoutInMinutes != nil {
-			txt := fmt.Sprintf("queued timeout in minutes: %d\n", *project.QueuedTimeoutInMinutes)
-			text.WriteString(txt)
-		}
-		if project.SourceVersion != nil {
-			txt := fmt.Sprintf("source version: %s\n", *project.SourceVersion)
-			text.WriteString(txt)
-		}
-		text.WriteString(fmt.Sprintf("build spec: \n%s\n", *project.Source.Buildspec))
-
-		table.SetText(text.String())
+		table.SetText(getString(projects[index]))
 	}
+}
+
+func getString(project types.Project) string {
+	text := strings.Builder{}
+	if project.Name != nil {
+		txt := fmt.Sprintf("name: %s\n", *project.Name)
+		text.WriteString(txt)
+	}
+	if project.Arn != nil {
+		txt := fmt.Sprintf("arn: %s\n", *project.Arn)
+		text.WriteString(txt)
+	}
+	text.WriteString(fmt.Sprintf("created: %s\n", project.Created))
+	text.WriteString(fmt.Sprintf("last modified: %s\n", project.LastModified))
+	if project.ServiceRole != nil {
+		txt := fmt.Sprintf("service role: %s\n", *project.ServiceRole)
+		text.WriteString(txt)
+	}
+	if project.ConcurrentBuildLimit != nil {
+		txt := fmt.Sprintf("conccurent build limit: %d\n", *project.ConcurrentBuildLimit)
+		text.WriteString(txt)
+	}
+	if project.Description != nil {
+		txt := fmt.Sprintf("description: %s\n", *project.Description)
+		text.WriteString(txt)
+	}
+	if project.EncryptionKey != nil {
+
+		txt := fmt.Sprintf("encryption key: %s\n", *project.EncryptionKey)
+		text.WriteString(txt)
+	}
+	if project.QueuedTimeoutInMinutes != nil {
+		txt := fmt.Sprintf("queued timeout in minutes: %d\n", *project.QueuedTimeoutInMinutes)
+		text.WriteString(txt)
+	}
+	if project.SourceVersion != nil {
+		txt := fmt.Sprintf("source version: %s\n", *project.SourceVersion)
+		text.WriteString(txt)
+	}
+	text.WriteString(fmt.Sprintf("build spec: \n%s\n", *project.Source.Buildspec))
+
+	return text.String()
 }
