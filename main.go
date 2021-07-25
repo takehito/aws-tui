@@ -137,14 +137,6 @@ func fmtProjectDescription(project types.Project) string {
 		txt := fmt.Sprintf("source version: %s\n", *project.SourceVersion)
 		text.WriteString(txt)
 	}
-	text.WriteString("log: ")
-	if project.LogsConfig == nil {
-		txt := fmt.Sprintf("%##v\n", project)
-		text.WriteString(txt)
-	} else {
-		txt := fmt.Sprintf("%##v\n", project)
-		text.WriteString(txt)
-	}
 	text.WriteString(fmt.Sprintf("build spec: \n%s\n", *project.Source.Buildspec))
 
 	return text.String()
