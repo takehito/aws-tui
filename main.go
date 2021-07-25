@@ -52,26 +52,6 @@ func getBuilds(table *tview.TextView, projects []types.Project) func(index int, 
 	}
 }
 
-func createBuildsView(project string) tview.Primitive {
-	cli := codebuild.NewFromConfig(cfg)
-	builds, err := cli.ListBuildsForProject(context.Background(), &codebuild.ListBuildsForProjectInput{
-		ProjectName: &project,
-	})
-	if err != nil {
-		panic(err)
-	}
-	list := tview.NewList().ShowSecondaryText(false)
-	list.SetBorder(true)
-
-	for _, v := range builds.Ids {
-		list.AddItem(v, "", []rune(v)[0], func() {})
-	}
-
-	return tview.NewFlex().
-		AddItem(list, 0, 1, true).
-		AddItem(tview.NewTextView(), 0, 2, true)
-}
-
 func createCodebuildprojectsView(projects []types.Project) tview.Primitive {
 	table := tview.NewTextView()
 	table.SetBorder(true)
