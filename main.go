@@ -31,6 +31,9 @@ func main() {
 
 	cli := codebuild.NewFromConfig(cfg)
 	resp, err := cli.ListProjects(context.TODO(), &codebuild.ListProjectsInput{})
+	if err != nil {
+		panic(err)
+	}
 	bgp, err := cli.BatchGetProjects(context.TODO(), &codebuild.BatchGetProjectsInput{
 		Names: resp.Projects,
 	})
