@@ -1,31 +1,22 @@
 package main
 
 import (
-	"context"
 	"strconv"
 	"strings"
 
-	"github.com/aws/aws-sdk-go-v2/service/codebuild"
 	"github.com/aws/aws-sdk-go-v2/service/codebuild/types"
 	"github.com/rivo/tview"
 )
 
-func createBuildsView(project string) tview.Primitive {
-	cli := codebuild.NewFromConfig(cfg)
-	builds, err := cli.ListBuildsForProject(context.Background(), &codebuild.ListBuildsForProjectInput{
-		ProjectName: &project,
-	})
-	if err != nil {
-		panic(err)
-	}
+func createBuildsView(ids []string) tview.Primitive {
 	list := tview.NewList().ShowSecondaryText(false)
 	list.SetBorder(true)
 
-	for _, v := range builds.Ids {
+	for _, v := range ids {
 		list.AddItem(v, "", []rune(v)[0], func() {})
 	}
 
-	builddescs, err := getBuildsDescription(builds.Ids)
+	builddescs, err := getBuildsDescription(ids)
 	if err != nil {
 		panic(err)
 	}

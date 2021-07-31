@@ -74,7 +74,18 @@ func createCodebuildprojectsView(projects []types.Project) tview.Primitive {
 	}
 	codebuilds.SetChangedFunc(getBuilds(table, projects))
 	codebuilds.SetSelectedFunc(func(i int, _ string, _ string, _ rune) {
-		app.SetRoot(createBuildsView(*projects[i].Name), true)
+		cli := codebuild.NewFromConfig(cfg)
+		builds, err := cli.ListBuildsForProject(context.Background(), &codebuild.ListBuildsForProjectInput{
+			ProjectName: projects[i].Name,
+		})
+		if err != nil {
+			panic(err)
+		}
+		if len(builds.Ids) == 0 {
+			return
+		}
+
+		app.SetRoot(createBuildsView(builds.Ids), true)
 	})
 	codebuilds.SetTitle("codebuild projects").SetBorder(true)
 
