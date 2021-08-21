@@ -17,3 +17,15 @@ func getLogGroups(logGroupPrefix string) ([]types.LogGroup, error) {
 	}
 	return dlg.LogGroups, nil
 }
+
+func getLog(groupName string, streamName string) ([]types.OutputLogEvent, error) {
+	cli := cloudwatchlogs.NewFromConfig(cfg)
+	gle, err := cli.GetLogEvents(context.Background(), &cloudwatchlogs.GetLogEventsInput{
+		LogGroupName:  &groupName,
+		LogStreamName: &streamName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return gle.Events, nil
+}

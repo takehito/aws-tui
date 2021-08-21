@@ -26,6 +26,14 @@ func createBuildsView(ids []string) tview.Primitive {
 		build := builddescs[index]
 		description.SetText(fmtBuild(build))
 	})
+	list.SetSelectedFunc(func(i int, s1, s2 string, r rune) {
+		selectedLogInfo := builddescs[i].Logs
+		log, err := getLog(*selectedLogInfo.GroupName, *selectedLogInfo.StreamName)
+		if err != nil {
+			panic(err)
+		}
+		app.SetRoot(createLogView(log), true)
+	})
 	description.SetText(fmtBuild(builddescs[0]))
 
 	return tview.NewFlex().
