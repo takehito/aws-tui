@@ -22,3 +22,15 @@ func getAllProjects() ([]types.Project, error) {
 
 	return bgp.Projects, nil
 }
+
+func getBuildsDescription(ids []string) ([]types.Build, error) {
+	cli := codebuild.NewFromConfig(cfg)
+	resp, err := cli.BatchGetBuilds(context.TODO(), &codebuild.BatchGetBuildsInput{
+		Ids: ids,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Builds, nil
+}
