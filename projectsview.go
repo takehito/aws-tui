@@ -32,7 +32,8 @@ func createCodebuildprojectsView(projects []types.Project) tview.Primitive {
 		if v.Description != nil {
 			desc = *v.Description
 		}
-		codebuilds.AddItem(*v.Name, desc, []rune(*v.Name)[0], func() {})
+		initial := []rune(strings.ToLower(*v.Name))[0]
+		codebuilds.AddItem(*v.Name, desc, initial, func() {})
 	}
 	codebuilds.SetChangedFunc(getBuilds(table, projects))
 	codebuilds.SetSelectedFunc(func(i int, _ string, _ string, _ rune) {
