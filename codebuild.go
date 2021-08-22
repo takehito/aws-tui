@@ -7,13 +7,18 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/codebuild/types"
 )
 
-func getBuildsDescription(ids []string) ([]types.Build, error) {
+func getAllProjects() ([]types.Project, error) {
 	cli := codebuild.NewFromConfig(cfg)
-	bgb, err := cli.BatchGetBuilds(context.Background(), &codebuild.BatchGetBuildsInput{
-		Ids: ids,
+	resp, err := cli.ListProjects(context.TODO(), &codebuild.ListProjectsInput{})
+	if err != nil {
+		return nil, err
+	}
+	bgp, err := cli.BatchGetProjects(context.TODO(), &codebuild.BatchGetProjectsInput{
+		Names: resp.Projects,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return bgb.Builds, nil
+
+	return bgp.Projects, nil
 }

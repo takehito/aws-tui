@@ -29,19 +29,12 @@ func main() {
 		panic(err)
 	}
 
-	cli := codebuild.NewFromConfig(cfg)
-	resp, err := cli.ListProjects(context.TODO(), &codebuild.ListProjectsInput{})
-	if err != nil {
-		panic(err)
-	}
-	bgp, err := cli.BatchGetProjects(context.TODO(), &codebuild.BatchGetProjectsInput{
-		Names: resp.Projects,
-	})
+	projects, err := getAllProjects()
 	if err != nil {
 		panic(err)
 	}
 
-	codebuildView := createCodebuildprojectsView(bgp.Projects)
+	codebuildView := createCodebuildprojectsView(projects)
 	app = tview.NewApplication()
 	app.SetRoot(codebuildView, true)
 	if err := app.Run(); err != nil {
