@@ -6,6 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
@@ -31,6 +32,13 @@ func main() {
 
 	codebuildView := createCodebuildprojectsView(projects)
 	app = tview.NewApplication()
+	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case tcell.KeyCtrlD:
+			app.Stop()
+		}
+		return event
+	})
 	app.SetRoot(codebuildView, true)
 	if err := app.Run(); err != nil {
 		panic(err)
