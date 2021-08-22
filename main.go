@@ -36,6 +36,8 @@ func main() {
 		switch event.Key() {
 		case tcell.KeyCtrlD:
 			app.Stop()
+		case tcell.KeyCtrlH:
+			app.SetRoot(codebuildView, true)
 		}
 		return event
 	})
